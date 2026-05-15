@@ -22,14 +22,14 @@ use iggy::prelude::{
     Partitioning,
 };
 use rand::{
-    RngExt,
     distr::{Alphanumeric, Uniform},
+    RngExt,
 };
 use serde::{Deserialize, Serialize};
 use std::{env, str::FromStr};
 use thiserror::Error;
 use tracing::info;
-use tracing_subscriber::{EnvFilter, Registry, layer::SubscriberExt, util::SubscriberInitExt};
+use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt, EnvFilter, Registry};
 
 const SOURCES: [&str; 6] = ["browser", "mobile", "desktop", "email", "network", "other"];
 const STATES: [&str; 5] = ["active", "inactive", "blocked", "deleted", "unknown"];
@@ -107,6 +107,7 @@ struct Record {
     state: String,
     created_at: DateTime<Utc>,
     message: String,
+    db_table: String,
 }
 
 fn random_record() -> Record {
@@ -131,6 +132,7 @@ fn random_record() -> Record {
         state,
         message: random_string(rng.sample(Uniform::new(10u32, 100).unwrap()) as usize),
         created_at,
+        db_table: "nyc.events".to_owned(),
     }
 }
 

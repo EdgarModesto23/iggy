@@ -17,10 +17,10 @@
  * under the License.
  */
 
-use crate::router::{Router, is_valid_namespaced_table, table_exists, write_data};
+use crate::router::{is_valid_namespaced_table, table_exists, write_data, Router};
 use async_trait::async_trait;
-use iceberg::Catalog;
 use iceberg::table::Table;
+use iceberg::Catalog;
 use iggy_connector_sdk::{ConsumedMessage, Error, MessagesMetadata, Payload};
 use simd_json::base::ValueAsObject;
 use std::collections::HashMap;

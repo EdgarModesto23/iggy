@@ -49,4 +49,4 @@ path = "local_state"
 
 [connectors]
 config_type = "local"
-config_dir = "core/connectors/runtime/example_config/connectors"
+config_dir = "core/connectors/runtime/example_config/con"
