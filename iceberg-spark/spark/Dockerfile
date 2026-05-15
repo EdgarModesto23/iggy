@@ -1,0 +1,1 @@
+FROM tabulario/spark-iceberg

@@ -68,5 +68,36 @@ services:
       /usr/bin/mc policy set public minio/warehouse;
       tail -f /dev/null
       "
+  table-init:
+    image: tabulario/spark-iceberg
+    container_name: table-init
+    networks:
+      iceberg_net:
+    depends_on:
+      - rest
+      - mc
+    environment:
+      - AWS_ACCESS_KEY_ID=admin
+      - AWS_SECRET_ACCESS_KEY=password
+      - AWS_REGION=us-east-1
+    entrypoint: ["/bin/bash", "-c"]
+    command:
+      - |
+        until curl -sf http://rest:8181/v1/config >/dev/null 2>&1; do
+          echo 'Waiting for REST catalog...'; sleep 3;
+        done
+        spark-sql -e "
+          CREATE NAMESPACE IF NOT EXISTS nyc;
+          CREATE TABLE IF NOT EXISTS nyc.events (
+            user_id    STRING,
+            user_type  INT,
+            email      STRING,
+            source     STRING,
+            state      STRING,
+            created_at TIMESTAMP,
+            message    STRING,
+            db_table   STRING
+          ) USING iceberg;
+        "
 networks:
   iceberg_net:
